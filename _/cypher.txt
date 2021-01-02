@@ -1,0 +1,146 @@
+http://localhost:32778/browser/
+
+:play movies
+
+
+MATCH (m:Movie {title:"A Few Good Men"})  WITH m MATCH (m) <- [:ACTED_IN] - (p:Person) return m,p
+
+MATCH (m:Movie {title:"A Few Good Men"})  WITH m MATCH (m) <- [:ACTED_IN] - (p:Person) return m,count(p)
+
+MATCH (m:Movie ) RETURN min(m.released), max(m.released), avg(m.released);
+
+MATCH (m:Movie {title:"A Few Good Men"} ) WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+RETURN min(m.released - p.born), 
+avg(m.released - p.born), 
+max(m.released - p.born);
+
+
+MATCH (m:Movie {title:"A Few Good Men"})  WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m, p 
+
+MATCH (m:Movie {title:"A Few Good Men"})  WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m,collect(p)
+
+MATCH (m:Movie ) 
+RETURN 
+min(m.released), max(m.released), 
+avg(m.released);
+
+MATCH (m:Movie ) 
+RETURN 
+sum(m.released), 
+stDev(m.released)
+
+
+MATCH (m:Movie {title:"A Few Good Men"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m.title, p.name 
+
+
+
+MATCH (m:Movie {title:"A Few Good Men"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m.title, p.name 
+
+
+
+MATCH (m:Movie {title:"A Few Good Men"} ) WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+RETURN min(m.released - p.born), 
+avg(m.released - p.born), 
+max(m.released - p.born);
+
+
+
+
+MATCH (m:Movie ) 
+RETURN 
+m.released,
+toInteger(m.title), 
+toFloat(m.released),
+toBoolean(toString(m.released))
+
+
+
+
+MATCH (m:Movie ) 
+RETURN 
+m.title,
+CASE  
+ WHEN m.released > 2000 THEN "2010s"
+ WHEN m.released > 2000 THEN "2000s"
+ WHEN m.released > 1990 THEN "1990s"
+ WHEN m.released > 1980 THEN "1980s"
+ WHEN m.released > 1970 THEN "1970s"
+ WHEN m.released > 1960 THEN "1960s"
+ WHEN m.released > 1950 THEN "1950s"
+ ELSE "pre-1950"
+END as released
+
+
+MATCH (m:Movie )  where m.released = 1986
+RETURN                               m.title, m.released
+
+
+COLLLECT
+MATCH (m:Movie {title:"A Few Good Men"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m, p
+
+
+MATCH (m:Movie {title:"Stand By Me"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m.title, collect(p)
+
+MATCH (m:Movie {title:"Stand By Me"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+return m.title, collect(p)
+
+
+
+MATCH (m:Movie {title:"Stand By Me"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+with m, collect(p) as p
+return m.title, p[0]
+
+MATCH (m:Movie {title:"Stand By Me"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+with m, collect(p) as p
+return m.title, p[0], size(p)
+
+MATCH (m:Movie {title:"Stand By Me"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+with m, collect(p) as p
+return m.title, p[0], size(p), p[0..2]
+
+
+MATCH (m:Movie {title:"Stand By Me"})  
+WITH m 
+MATCH (m) <- [:ACTED_IN] - (p:Person) 
+with m, collect(p) as p
+all(x IN p WHERE exists(x.property))
+any(x IN p WHERE exists(x.property))
+none(x IN p WHERE exists(x.property))
+single(x IN p WHERE exists(x.property))
+
+
+
+
+
+:SCHEMA
+
+EXPLAIN MATCH (m:Movie {title: "Stand By Me"}) return m
+CREATE INDEX ON :Movie(title)
+DROP INDEX ON :Movie(title)
+
